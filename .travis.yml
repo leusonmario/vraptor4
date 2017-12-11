@@ -1,4 +1,26 @@
+
+sudo: required
 language: java
-sudo: false
+
 jdk:
   - oraclejdk8
+
+
+script:
+  - mvn clean cobertura:cobertura -Dtest=CDIBasedContainerTest#shouldReturnAllDefaultDeserializers -DfailIfNoTests=false
+
+before_deploy:
+- tar -zcvf coverage-result.tar.gz /home/travis/build/leusonmario/vraptor4/target/site/cobertura
+
+deploy:
+  provider: releases
+  api_key:
+    secure: "cD5MNwXjIqQEPVNeEUWBMkffMs1NSa9x+15OiKQjh9v2RvD3ipZyl0aS/Oosl/UJZOWxjpLBSU0Lfe4YCNJpLlxlJ1hSXmTUmex4kWkNaYSWzXcXCyhzHvdd7cHvjS69jxMDI0/RL0DrYN7yEWUMs2MfWlHjvw0Dqo0wsMLWeX8NPBga5AVTzbV87L4C02LEaYwnsuE/zcZJY/bdnriSZiclfM70IiUMqM8rhs5sg3hJ+IdUXS/XKsYMsDTrkHk70zkSQLfcDZNY7miMPQFqishJw/yM0Bc/igtTsGEOkl6IM1p7dR+AxBIGNbN9XowWfI/bqwzg9keGnsI1JV7ivJlfRmcA5jUqsaEegn0tiQ9VdSkzRGR/4nJw8aqsrompW8rdrsRPzu0RQHWyGqek5UaaezUmrPr0hkM5vIoCdsgmhE/L1SPB32/YVjEjL6YO6/Lrbu+DPw3YWoTtZs8kKyhpL9zbBa3Z+WbBdmSfAs2kDysl/mKTHFoB61SoREN6gfNVbST8GWAZjF9gA8E5uOCK8fWgpjlPD406Q1OGMqaXU1iuAD3FKDZBH5gDnevN9EOkZCpQfZuSEQyC5dZH5uadwGoDdyYdhyq+/B4mwja+AR3VRuvtLC5iOMbfVC5FBm+6oyA93KFB4Zy4HSb2iRint/wcCXOOVsKMlKv7NB0="
+
+
+  file: coverage-result.tar.gz
+  file_glob: true
+  overwrite: true
+  skip_cleanup: true
+  on:
+    tags: true
