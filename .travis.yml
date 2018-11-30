@@ -1,2 +1,4 @@
 language: java
 
+script:
+  - mvn clean cobertura:cobertura -Dtest=RequestStartedFactoryTest#shouldRunVRaptorStackIfVRaptorRequestStartedEventIsFired -DfailIfNoTests=false
